@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .outer-square {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            width: 200px;
+            height: 200px;
+
+            background-color: cadetblue;
+        }
+
+        .inner-square {
+            width: 100px;
+            height: 100px;
+
+            background-color: goldenrod;
+        }
+
+        .dragged {
+            position: absolute;
+        }
+
+        .spot {
+            position: absolute;
+
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="spot"></div>
+    <a href="https://sky.pro" class="link dropdown">Я тренировочная ссылка</button>
+    <div class="outer-square">
+        <div class="inner-square">
+
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const link = document.querySelector('.link');
+            link.addEventListener('click', function(event) {
+                event.preventDefault();
+                console.log(event);
+                console.log('link click');
+            });
+
+            link.addEventListener('contextmenu', function(event) {
+                event.preventDefault();
+                console.log(event);
+                console.log('link contextmenu');
+            });
+
+            link.addEventListener('mousedown', function(event) {
+                event.preventDefault();
+                console.log(event);
+                console.log('link mousedown');
+            });
+
+            link.addEventListener('mouseup', function(event) {
+                event.preventDefault();
+                console.log(event);
+                console.log('link mouseup');
+            });
+
+            document.querySelector('.dropdown').addEventListener('click', function() {
+                console.log('dropdown click');
+            });
+
+            const outerSquare = document.querySelector('.outer-square');
+            const innerSquare = document.querySelector('.inner-square');
+            const spot = document.querySelector('.spot');
+
+            outerSquare.addEventListener('mousemove', (event) => {
+                console.log(
+                    event.clientX + ':' + event.clientY
+                );
+
+                spot.style.top = event.clientY - 3 + 'px';
+                spot.style.left = event.clientX + 3 + 'px';
+            });
+
+            outerSquare.addEventListener('mouseenter', () => {
+                console.log('outersquare mouseenter');
+            });
+
+            outerSquare.addEventListener('mouseleave', () => {
+                console.log('outersquare mouseleave');
+            });
+
+            outerSquare.addEventListener('mouseover', () => {
+                console.log('outersquare mouseover');
+            });
+
+            outerSquare.addEventListener('mouseout', () => {
+                console.log('outersquare mouseout');
+            });
+
+            innerSquare.addEventListener('mouseenter', () => {
+                console.log('innersquare mouseenter');
+            });
+
+            innerSquare.addEventListener('mouseleave', () => {
+                console.log('innersquare mouseleave');
+            });
+
+            innerSquare.addEventListener('mouseover', () => {
+                console.log('innersquare mouseover');
+            });
+
+            innerSquare.addEventListener('mouseout', () => {
+                console.log('innersquare mouseout');
+            });
+
+            let dragging = false;
+
+            function moveInnerSquare(clientX, clientY) {
+                innerSquare.style.top = clientY - 50 + 'px';
+                innerSquare.style.left = clientX - 50 + 'px';
+            };
+
+            innerSquare.addEventListener('mousedown', (event) => {
+                const { clientX, clientY } = event;
+
+                dragging = true;
+
+                innerSquare.classList.add('dragged');
+                moveInnerSquare(clientX, clientY);
+            });
+
+            outerSquare.addEventListener('mousemove', (event) => {
+                if (!dragging) {
+                    return;
+                }
+
+                const { clientX, clientY } = event;
+                moveInnerSquare(clientX, clientY);
+            });
+
+            outerSquare.addEventListener('mouseup', (event) => {
+                dragging = false;
+
+                //innerSquare.classList.remove('dragged');
+            });
+        });
+    </script>
+</body>
+</html>

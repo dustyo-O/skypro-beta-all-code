@@ -1,0 +1,20 @@
+{
+  "name": "3.9_modules",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@popperjs/core": "^2.11.2",
+    "tinymce": "^5.10.3",
+    "tippy.js": "^6.3.7",
+    "toastify-js": "^1.11.2",
+    "uiswitch": "^1.1.1",
+    "vanillajs-datepicker": "^1.2.0"
+  }
+}

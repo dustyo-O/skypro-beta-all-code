@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .button {
+            padding: 4px 8px;
+            border-radius: 3px;
+            border: 1px solid #333;
+        }
+
+        .copy-button {
+            background-color: lightgray;
+        }
+
+        .promo {
+            background-color: #fc0;
+        }
+
+        .count-text {
+            margin: 0 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>3.2 Работа с DOM</h1>
+    <input class="copy-text">
+    <button class="button copy-button">Скопировать!</button>
+    <button class="button console-button promo">Вывести в консоль</button>
+    <button class="button copy-button promo">Скопировать!</button>
+    <button class="button console-button">Вывести в консоль</button>
+    <div class="count-widget">
+        <div>
+            <span class="count-widget__count-text">0</span>
+        </div>
+        <section>
+            <button class="button count-widget__count-button">Кликов</button>
+        </section>
+    </div>
+    <div class="count-widget">
+        <div>
+            <span class="count-widget__count-text">0</span>
+        </div>
+        <section>
+            <button class="button count-widget__count-button">Кликов</button>
+        </section>
+    </div>
+    <script>
+        let inner = document.body.firstElementChild;
+
+        while(inner) {
+            console.log(inner);
+
+            inner = inner.nextElementSibling;
+        }
+
+        const copyText = document.querySelector('.copy-text');
+
+        const initialValue = localStorage.getItem('copy-value');
+        console.log(initialValue);
+
+        if (initialValue) {
+            copyText.value = initialValue;
+        }
+
+        const copyButtons = document.querySelectorAll('.copy-button');
+
+        function copyHandler() {
+            const value = copyText.value;
+
+            navigator.clipboard.writeText(value);
+            localStorage.setItem('copy-value', value)
+        }
+
+        for(let copyButton of copyButtons) {
+            copyButton.onclick = copyHandler;
+        }
+
+        const consoleButtons = document.querySelectorAll('.console-button');
+
+        function consoleHandler() {
+            navigator.clipboard.readText().then((data) => {
+                console.log(data);
+            });
+        }
+
+        for(let consoleButton of consoleButtons) {
+            consoleButton.onclick = consoleHandler;
+        }
+
+        const countButtons = document.querySelectorAll('.count-widget__count-button');
+
+        function countHandler() {
+            console.log(this.dataset.clicks);
+            let clicks = Number(this.dataset.clicks) || 0;
+
+            clicks = clicks + 1;
+
+            this.dataset.clicks = clicks;
+
+            const parent = this.closest('.count-widget');
+            const countText = parent.querySelector('.count-widget__count-text');
+
+            countText.textContent = clicks;
+        }
+
+        for(let countButton of countButtons) {
+            countButton.onclick = countHandler;
+        }
+    </script>
+</body>
+</html>

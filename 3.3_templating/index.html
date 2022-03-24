@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .photo {
+            display: inline-block;
+
+            width: 300px;
+            margin-top: 10px;
+            margin-right: 14px;
+            border: 1px solid black;
+            border-radius: 8px;
+        }
+
+        .photo__image {
+            height: 200px;
+            border-radius: 8px 8px 0 0;
+
+            background-size: cover;
+            background-position: center;
+        }
+
+        .photo__info {
+            display: flex;
+
+            padding: 10px 12px;
+        }
+
+        .photo__user {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+        }
+
+        .photo__user-avatar {
+            border-radius: 50%;
+        }
+
+        .photo__user-name {
+            flex-grow: 1;
+
+            margin-left: 8px;
+        }
+
+        .photo__heart {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <section class="gallery">
+        <article class="photo">
+            <div class="photo__image" style="background-image: url(https://images.unsplash.com/photo-1471897488648-5eae4ac6686b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyNjA2MzJ8MXwxfGFsbHwxfHx8fHx8Mnx8MTY0MzM4NDI4OQ&ixlib=rb-1.2.1&q=80&w=400);">
+            </div>
+            <footer class="photo__info">
+                <div class="photo__user">
+                    <img class="photo__user-avatar" src="https://images.unsplash.com/profile-1540865537012-80ce3b955019?ixlib=rb-1.2.1&q=80&fm=jpg&crop=faces&cs=tinysrgb&fit=crop&h=32&w=32">
+                    <div class="photo__user-name">Sarah Dorweiler</div>
+                </div>
+                <span class="photo__likes">418 <i class="photo__heart fa fa-heart"></i></span>
+            </footer>
+        </article>
+
+    </section>
+    <script src="https://kit.fontawesome.com/80d0029610.js" crossorigin="anonymous"></script>
+    <script src="data.js"></script>
+    <script>
+        const photos = JSON.parse(photosData);
+        const gallery = document.querySelector('.gallery');
+
+        function photoStringTemplate(photo) {
+            return `
+                <article class="photo">
+                    <div class="photo__image" style="background-image: url(${photo.urls.small});">
+                    </div>
+                    <footer class="photo__info">
+                        <div class="photo__user">
+                            <img class="photo__user-avatar" src="${photo.user.profile_image.small}">
+                            <div class="photo__user-name">${photo.user.name}</div>
+                        </div>
+                        <span class="photo__likes">
+                            ${photo.likes} <i class="photo__heart fas fa-heart"></i>
+                        </span>
+                    </footer>
+                </article>
+            `;
+        }
+
+        function photoObjectTemplate(photo) {
+            return {
+                block: 'article',
+                cls: 'photo',
+                content: [{
+                    block: 'div',
+                    cls: 'photo__image',
+                    attrs: { style: `background-image: url(${photo.urls.small});` }
+                }, {
+                    block: 'footer',
+                    cls: 'photo__info',
+                    content: [{
+                        block: 'div',
+                        cls: 'photo__user',
+                        content: [{
+                            block: 'img',
+                            cls: 'photo__user-avatar',
+                            attrs: { src: photo.user.profile_image.small }
+                        }, {
+                            block: 'div',
+                            cls: 'photo__user-name',
+                            content: photo.user.name,
+                        }]
+                    }, {
+                        block: 'span',
+                        cls: 'photo__likes',
+                        content: [
+                            photo.likes,
+                            ' ',
+                            { block: 'i', cls: ['photo__heart', 'fas', 'fa-heart'] }
+                        ]
+                    }]
+                }]
+            }
+        }
+
+        function templateEngine(block) {
+            if (block === undefined || block === null || block === false) {
+                return document.createTextNode('');
+            }
+
+            if (typeof block === 'string' || typeof block === 'number' || block === true) {
+                return document.createTextNode(block);
+            }
+
+            if (Array.isArray(block)) {
+                const fragment = document.createDocumentFragment();
+
+                block.forEach((el) => {
+                    fragment.appendChild(templateEngine(el));
+                });
+
+                return fragment;
+            }
+
+            const element = document.createElement(block.block);
+
+            [].concat(block.cls).filter(Boolean).forEach(cls => {
+                element.classList.add(cls);
+            });
+
+            if (block.attrs) {
+                Object.keys(block.attrs).forEach(key => {
+                    element.setAttribute(key, block.attrs[key]);
+                });
+            }
+
+            element.appendChild(templateEngine(block.content));
+
+            return element;
+        }
+
+        function photoVanillaTemplate(photoData) {
+            const photo = document.createElement('article');
+            photo.classList.add('photo');
+
+            const photoImage = document.createElement('div');
+            photoImage.classList.add('photo__image');
+            console.log(photoData.urls.small);
+            photoImage.style.backgroundImage = `url(${photoData.urls.small})`;
+
+            console.log(photoImage.style);
+
+            photo.appendChild(photoImage);
+
+            const photoInfo = document.createElement('footer');
+            photoInfo.classList.add('photo__info');
+
+            photo.appendChild(photoInfo);
+
+            const photoUser = document.createElement('div');
+            photoUser.classList.add('photo__user');
+
+            photoInfo.appendChild(photoUser);
+
+            const photoUserAvatar = document.createElement('img');
+            photoUserAvatar.classList.add('photo__user-avatar');
+            photoUserAvatar.src = photoData.user.profile_image.small;
+
+            photoUser.appendChild(photoUserAvatar);
+
+            const photoUserName = document.createElement('div');
+            photoUserName.classList.add('photo__user-name');
+            photoUserName.textContent = photoData.user.name;
+
+            photoUser.appendChild(photoUserName);
+
+            const photoLikes = document.createElement('span');
+            photoLikes.classList.add('photo__likes');
+
+            photoInfo.appendChild(photoLikes);
+
+            const likes = document.createTextNode(photoData.likes + ' ');
+            photoLikes.appendChild(likes);
+
+            const photoHeart = document.createElement('i');
+            photoHeart.classList.add('fas', 'fa-heart', 'photo__heart');
+
+            photoLikes.appendChild(photoHeart);
+
+            return photo;
+        }
+
+        gallery.innerHTML += photos.map(photo => {
+            const photoHtml = photoStringTemplate(photo);
+
+            return photoHtml;
+        }).join('');
+
+        const fragment = document.createDocumentFragment();
+
+        photos.forEach(photo => {
+            const photoElement = photoVanillaTemplate(photo);
+
+            fragment.appendChild(photoElement);
+        });
+
+        gallery.appendChild(fragment);
+
+        gallery.appendChild(
+            templateEngine(photos.map(photo => photoObjectTemplate(photo)))
+        );
+    </script>
+</body>
+</html>

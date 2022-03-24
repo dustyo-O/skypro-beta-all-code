@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="container">
+
+    </div>
+    <form class="form">
+        <input class="form__title form__element" name="title">
+        <input class="form__body form__element" name="body">
+        <button>Создать</button>
+    </form>
+    <script>
+        const container = document.querySelector('.container');
+        const form = document.querySelector('.form');
+
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const elements = document.querySelectorAll('.form__element');
+
+            const data = {
+                userId: 1,
+            };
+
+            elements.forEach(el => {
+                data[el.name] = el.value;
+            });
+
+            const request = new XMLHttpRequest();
+            request.open('POST', 'https://jsonplaceholder.typicode.com/posts', true);
+            request.setRequestHeader('Content-type', 'application/json; charset=UTF-8')
+
+            request.responseType = 'json';
+            request.onload = function() {
+                console.log(request.response);
+                const element = document.createElement('article');
+                element.textContent = request.response.title;
+
+                container.appendChild(element);
+            }
+
+            request.send(JSON.stringify(data));
+        });
+    </script>
+</body>
+</html>

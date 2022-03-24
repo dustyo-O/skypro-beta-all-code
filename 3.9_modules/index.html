@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+    </style>
+    <link rel="stylesheet" href="node_modules/uiswitch/css/uiswitch.min.css">
+    <link rel="stylesheet" href="node_modules/vanillajs-datepicker/dist/css/datepicker.min.css">
+    <link rel="stylesheet" href="node_modules/tippy.js/dist/tippy.css">
+    <link rel="stylesheet" href="node_modules/toastify-js/src/toastify.css">
+</head>
+<body>
+    <h1>Модули</h1>
+    <h1>Еще заголовок</h1>
+    <div><input type="text" class="datepicker-input"></div>
+    <div><input type="checkbox" class="uiswitch custom"></div>
+    <textarea class="tinymce">Hello, World!</textarea>
+    <script src="node_modules/vanillajs-datepicker/dist/js/datepicker-full.min.js"></script>
+    <script src="node_modules/@popperjs/core/dist/umd/popper.min.js"></script>
+    <script src="node_modules/tippy.js/dist/tippy-bundle.umd.min.js"></script>
+    <script src="node_modules/tinymce/tinymce.min.js"></script>
+    <script src="node_modules/toastify-js/src/toastify.js"></script>
+    <script>
+        const datepickerInput = document.querySelector('.datepicker-input');
+
+        const datepicker = new Datepicker(datepickerInput, {
+        // ...options
+        });
+
+        tippy('.datepicker-input', {
+            content: 'Привет тултип!',
+        });
+
+        tinymce.init({
+            selector: '.tinymce'
+        });
+    </script>
+</body>
+</html>

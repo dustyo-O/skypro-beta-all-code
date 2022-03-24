@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Requests</title>
+</head>
+<body>
+    <script>
+        const key = 'dict.1.1.20220223T155457Z.5046e52f6a5095ee.ede41fc3d2f60783ad80353c7f147ade94ff328a';
+
+        fetch('https://dictionary.yandex.net/api/v1/dicservice.json/lookup', {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/x-www-form-urlencoded'
+            },
+            body: `key=${encodeURIComponent(key)}&lang=ru-ru&text=${encodeURIComponent('пирог')}&ui=ru`,
+        })
+            .then(response => response.json())
+            .then(json => console.log(json));
+    </script>
+</body>
+</html>

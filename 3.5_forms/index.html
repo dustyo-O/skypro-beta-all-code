@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .form__field_error .form__control {
+            border-color: red;
+        }
+    </style>
+</head>
+<body>
+    <form
+        class="form"
+        action="result.html"
+        novalidate
+    >
+        <div class="form__field">
+            <label for="login">Имя пользователя:</label>
+            <input required class="form__control" id="login" type="text" name="login" maxlength="10">
+        </div>
+        <div class="form__field">
+            <label for="age">Возраст собаки:</label>
+            <input required class="form__control" id="age" type="number" name="age" min="0" max="30" step="1">
+        </div>
+        <div class="form__field">
+            <label for="email">Электропочта кошки:</label>
+            <input required class="form__control form__email" id="email" type="email" name="email">
+        </div>
+        <div class="form__field">
+            <label for="credit-card">Кредитная карта хомяка:</label>
+            <input required class="form__control" id="credit-card" pattern="^(?:4[0-9]{12}(?:[0-9]{3})?|[25][1-7][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$" name="credit-card">
+        </div>
+        <div class="form__field">
+            <label for="password">Пароль:</label>
+            <input class="form__control" id="password" type="password" name="password">
+        </div>
+        <div class="form__field">
+            <label for="agree">Согласен на очень полезную рассылку:</label>
+            <input class="form__control" id="agree" type="checkbox" name="agree">
+        </div>
+        <div class="form__field">
+            <label>Уровень сложности:</label>
+            <label for="difficulty-easy">Легкий</label>
+            <input class="form__control" id="difficulty-easy" type="radio" name="difficulty" value="easy">
+            <label for="difficulty-medium">Средний</label>
+            <input class="form__control" id="difficulty-medium" type="radio" name="difficulty" value="medium">
+            <label for="difficulty-hard">Сложный</label>
+            <input class="form__control" id="difficulty-hard" type="radio" name="difficulty" value="hard">
+        </div>
+        <div class="form__field">
+            <label for="agree">Язык программирования</label>
+            <select name="lang" class="form__control">
+                <option value="javascript">JavaScript</option>
+                <option value="typescript">TypeScript</option>
+                <option value="nodejs">Node.JS</option>
+                <option value="coffeescript">CoffeeScript</option>
+            </select>
+        </div>
+        <div class="form__field">
+            <label for="comment">Комментарий:</label>
+            <textarea class="form__control" id="comment" name="comment"></textarea>
+        </div>
+        <button class="form__submit-button">Отправить немедленно!</button>
+    </form>
+    <script>
+        let formData = {};
+        const form = document.querySelector('.form');
+
+        const formSubmitButton = form.querySelector('.form__submit-button');
+
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const elements = form.querySelectorAll('.form__control');
+
+            elements.forEach((el) => {
+                const field = el.closest('.form__field');
+
+                if (!el.validity.valid)  {
+                    field.classList.add('form__field_error');
+                } else {
+                    field.classList.remove('form__field_error');
+                }
+            });
+
+            if (!form.checkValidity()) {
+                return; // форма некорректная, выходим
+            }
+
+            console.log(formData); // все хорошо, работаем с данными
+        });
+
+        form.addEventListener('input', (event) => {
+            event.preventDefault();
+
+            const el = event.target;
+
+            formData[el.name] = el.type === 'checkbox' ? el.checked : el.value;
+
+            console.log(formData);
+        });
+    </script>
+</body>
+</html>

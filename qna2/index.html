@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .promo-text {
+            padding-left: 20px;
+
+            font-style: italic;
+        }
+
+        .article {
+            margin-top: 20px;
+
+            color: #333;
+        }
+
+        .inline-edit {
+            overflow: hidden;
+        }
+
+        .inline-edit__editor {
+            width: 100%;
+        }
+
+        .inline-edit__save-button {
+            float: right;
+
+            padding: 4px 8px;
+
+            background-color: #fc0;
+            border: 1px solid #333;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <h1>QNA-2</h1>
+    <div class="promo-text inline-edit">Служба Яндекс.Рефераты предназначена для студентов и школьников, дизайнеров и журналистов, создателей научных заявок и отчетов — для всех, кто относится к тексту, как к количеству знаков.</div>
+    <p class="article inline-edit">
+        Прекрасное дает реконструктивный подход, именно об этом комплексе движущих сил писал З.Фрейд в теории сублимации. Декаданс выстраивает формирование имиджа, подобный исследовательский подход к проблемам художественной типологии можно обнаружить у К.Фосслера. Эластичность спроса свободна. Выявляя устойчивые архетипы на примере художественного творчества, можно сказать, что эзотерическое выстраивает повторный контакт, признавая определенные рыночные тенденции. Флобер, описывая нервный припадок Эммы Бовари, переживает его сам: нивелирование индивидуальности монотонно транслирует мониторинг активности.
+    </p>
+    <script>
+        const inlineEditors = document.querySelectorAll('.inline-edit');
+
+        function inlineEditSaveHandler(event) {
+            console.log(event);
+            const button = event.target;
+
+            const inlineEditor = button.closest('.inline-edit');
+            const editor = inlineEditor.querySelector('.inline-edit__editor');
+
+            const newContent = editor.value;
+
+            inlineEditor.textContent = newContent;
+
+            inlineEditor.addEventListener('click', inlineEditCreateHandler);
+        }
+
+        function inlineEditCreateHandler(event) {
+            const target = event.target
+            console.log('click');
+            const content = target.textContent.trim();
+
+            const editor = document.createElement('textarea');
+            editor.classList.add('inline-edit__editor');
+            editor.textContent = content;
+
+            const saveButton = document.createElement('button');
+            saveButton.textContent = 'Сохранить';
+            saveButton.classList.add('inline-edit__save-button');
+            saveButton.addEventListener('click', inlineEditSaveHandler);
+
+            target.textContent = '';
+            target.appendChild(editor);
+            target.appendChild(saveButton);
+
+            target.removeEventListener('click', inlineEditCreateHandler);
+        }
+
+        inlineEditors.forEach((inlineEditor) => {
+            inlineEditor.addEventListener('click', inlineEditCreateHandler);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            min-height: 200vh;
+        }
+
+        .outer-square {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+
+            padding: 10px;
+            width: 50px;
+
+            background-color: gray;
+        }
+
+        .inner-yellow-square {
+            width: 30px;
+            height: 30px;
+
+            background-color: goldenrod;
+        }
+
+        .inner-red-square {
+            width: 30px;
+            height: 30px;
+
+            background-color: lightcoral;
+        }
+
+        .inner-green-square {
+            width: 30px;
+            height: 30px;
+
+            background-color: lightgreen;
+        }
+    </style>
+</head>
+<body>
+    <div class="outer-square">
+        <div class="inner-red-square" data-color="red">
+
+        </div>
+        <div class="inner-yellow-square" data-color="yellow">
+
+        </div>
+        <div class="inner-green-square" data-color="green">
+
+        </div>
+    </div>
+    <script>
+        window.addEventListener('scroll', (event) => {
+            const body = document.body;
+            const html = document.documentElement;
+            const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
+
+            const documentHeight = Math.max(
+                body.scrollHeight,
+                body.offsetHeight,
+                html.clientHeight,
+                html.scrollHeight,
+                html.offsetHeight,
+            );
+
+            if (window.scrollY + vh + vh > documentHeight) {
+                document.body.style.height = documentHeight + 2 * vh + 'px';
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const outerSquare = document.querySelector('.outer-square');
+            const innerSquare = document.querySelector('.inner-square');
+
+            outerSquare.addEventListener('click', (event) => {
+                event.stopPropagation();
+
+                console.log(event.currentTarget);
+                console.log(event.target);
+
+                console.log(event.target.dataset.color);
+
+                console.log('outer square click');
+            });
+
+            document.body.addEventListener('click', (event) => {
+                console.log('document body click');
+            });
+
+            document.documentElement.addEventListener('click', (event) => {
+                console.log('document html click');
+            }, true);
+        });
+    </script>
+</body>
+</html>

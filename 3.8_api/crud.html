@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users</title>
+</head>
+<body>
+    <h1>Users</h1>
+    <section class="users-panel"></section>
+    <script>
+        let applicationUsers = [];
+        const usersPanel = document.querySelector('.users-panel');
+
+        usersPanel.addEventListener('click', (event) => {
+            const target = event.target;
+            if (target.classList.contains('users-panel__delete-button')) {
+                const userId = target.dataset.id;
+
+                const request = new XMLHttpRequest();
+
+                request.open('GET', '/api/delete.json?id=' + userId, true);
+
+                request.responseType = 'json';
+                request.onload = function() {
+                    console.log('onload delete');
+                    applicationUsers = applicationUsers.filter(user => {
+                        console.log(user.id);
+                        console.log(userId);
+                        console.log(user.id !== userId);
+                        return user.id !== +userId;
+                    });
+                    drawUsers();
+                }
+
+                request.send();
+            }
+        });
+
+        function drawUsers() {
+            usersPanel.innerHTML = '';
+            applicationUsers.forEach(user => {
+                const userElement = document.createElement('div');
+                userElement.textContent = user.name;
+
+                const deleteElement = document.createElement('span');
+                deleteElement.classList.add('users-panel__delete-button');
+                deleteElement.dataset.id = user.id;
+                deleteElement.textContent = '❌';
+
+                userElement.appendChild(deleteElement);
+
+                usersPanel.appendChild(userElement);
+            });
+        }
+
+        const request = new XMLHttpRequest();
+
+        request.open('GET', '/api/users.json', true);
+
+        request.responseType = 'json';
+        request.onload = function() {
+            applicationUsers = request.response;
+            drawUsers();
+        }
+
+        request.send();
+    </script>
+</body>
+</html>
